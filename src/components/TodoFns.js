@@ -21,8 +21,8 @@ export default function TodosFn() {
       })
       // .then((data) => console.log(data));
       .then((data) => {
-        // renderTodos(data);
-        console.log(data);
+        renderTodos(data);
+        // console.log(data);
       });
     // setInput(() => "");
   };
