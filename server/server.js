@@ -15,8 +15,10 @@ app.use(express.json()); // to access the request body
 app.get("/todos", (req, res) => {
   let query = "SELECT * FROM todo";
   db.query(query, (err, data) => {
-    console.log(data);
-    res.status(200).send(data);
+    if (data) res.status(200).send(data);
+    else {
+      res.status(404).send("error");
+    }
   });
 });
 

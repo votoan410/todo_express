@@ -14,14 +14,15 @@ export default function TodosFn() {
     loadData();
   }, []);
 
-  const loadData = () => {
-    fetch([API_URL, PATH].join("/"))
+  const loadData = async () => {
+    await fetch([API_URL, PATH].join("/"))
       .then((res) => {
-        res.json();
+        return res.json();
       })
       // .then((data) => console.log(data));
       .then((data) => {
-        renderTodos(data);
+        // renderTodos(data);
+        console.log(data);
       });
     // setInput(() => "");
   };
@@ -32,6 +33,7 @@ export default function TodosFn() {
     newList = newList.concat(completedTodos);
     setTotoList(newList);
   }
+
   function handleChange(event) {
     setInput(event.target.value);
   }
