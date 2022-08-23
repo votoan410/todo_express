@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const API_URL = "http://localhost:4000";
 const PATH = "todos";
@@ -25,6 +25,25 @@ export default function TodosFn() {
         // console.log(data);
       });
     // setInput(() => "");
+  };
+
+  // DOM structure selector
+  const DomSelectors = {
+    root: "task__list",
+    taskSection: {
+      taskContainer: "task__container",
+      taskEntry: "task__entry",
+      markedTaskEntry: "task__entry-marked",
+      title: "task__title",
+      edit: "task__edit",
+      deleteTask: "task__delete",
+    },
+  };
+
+  const [value, setValue] = useState("");
+
+  const submit = () => {
+    console.log("value inputted: ", value);
   };
 
   function renderTodos(data) {
@@ -89,70 +108,85 @@ export default function TodosFn() {
 
   return (
     <>
-      <div className="form" onSubmit={(e) => addTodo(e)}>
-        <form>
-          <input
-            type="text"
-            className="form-input"
-            onChange={handleChange}
-            onClick={(e) => (e.target.value = "")}
-          />
-          <button className="form-submit" type="submit">
-            Submit
-          </button>
-        </form>
-      </div>
+      <header className="header">
+        <input
+          type="text"
+          id="input__box"
+          name="create-task"
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+        />
+        <button
+          value="submit"
+          id="input__submit"
+          name="create-task"
+          onClick={submit}
+        >
+          Submit{" "}
+        </button>
+      </header>
 
-      <div className="todos-container">
-        {todoList.map((element) => {
+      <div className="task__list">
+        {todoList.map((task) => {
           return (
-            <div className="todo-item">
-              {editble & (element.id === id) ? (
-                <input
-                  className="todo-edit-input"
-                  ref={textInput}
-                  onChange={handleChange}
-                ></input>
-              ) : (
-                <p
-                  ref={textInput}
-                  className={`todo-content ${
-                    element.completed ? "completed" : ""
-                  }`}
-                  onClick={() => completedTodo(element.id, element.completed)}
+            <>
+              <section
+                className={DomSelectors.taskSection.taskEntry}
+                //   style={task.completed ? "text-decoration: line-through;" : null}
+              >
+                <div
+                  className={DomSelectors.taskSection.title}
+                  id={`div-${task.id}`}
                 >
-                  {element.content}
-                </p>
-              )}
-
-              <div>
-                <svg
-                  focusable="false"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  data-testid="EditIcon"
-                  onClick={() => editTodo(element.id)}
-                  aria-label="fontSize small"
-                  className="small edit"
-                  fill="#e6e2d3"
+                  <h3
+                    id={`title-click-${task.id}`}
+                    // style="cursor:grab"
+                  >
+                    {task.content}
+                  </h3>
+                </div>
+                <div
+                  className={DomSelectors.taskSection.edit}
+                  // style={task.completed ? "display: none" : null}
                 >
-                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
-                </svg>
-
-                <svg
-                  focusable="false"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  data-testid="DeleteIcon"
-                  aria-label="fontSize small"
-                  className="small delete"
-                  fill="#e6e2d3"
-                  onClick={() => deleteTodo(element.id)}
+                  <svg
+                    id={`btn-edit-${task.id}`}
+                    focusable="false"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    data-testid="EditIcon"
+                    aria-label="fontSize small"
+                  >
+                    <path
+                      id={`btn-edit-${task.id}`}
+                      fill="#ffffff"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959
+                        0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  className={DomSelectors.taskSection.deleteTask}
+                  id={`btn-delete-${task.id}`}
                 >
-                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                </svg>
-              </div>
-            </div>
+                  <svg
+                    focusable="false"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    data-testid="DeleteIcon"
+                    aria-label="fontSize small"
+                  >
+                    <path
+                      id={`btn-delete-${task.id}`}
+                      fill="#ffffff"
+                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                    ></path>
+                  </svg>
+                </div>
+              </section>
+            </>
           );
         })}
       </div>
